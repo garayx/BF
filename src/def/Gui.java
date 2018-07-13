@@ -194,28 +194,28 @@ public class Gui {
 		JLabel lblThreads = new JLabel("Threads:");
 		JRadioButton rdbtnNewRadioButton = new JRadioButton("One");
 		buttonGroup.add(rdbtnNewRadioButton);
+		// set threads number to one
 		rdbtnNewRadioButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setThreadNumber(1);
-				// System.out.println(threads);
 			}
 		});
 
 		JRadioButton rdbtnTwo = new JRadioButton("Two");
 		buttonGroup.add(rdbtnTwo);
+		// set threads number to two
 		rdbtnTwo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setThreadNumber(2);
-				// System.out.println(threads);
 			}
 		});
 
 		JRadioButton rdbtnMax = new JRadioButton("Max");
 		buttonGroup.add(rdbtnMax);
+		// set thread number to max avaible
 		rdbtnMax.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setThreadNumber(maxThreads);
-				// System.out.println(threads);
 			}
 		});
 		rdbtnMax.setSelected(true);
