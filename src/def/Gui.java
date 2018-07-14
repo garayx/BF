@@ -19,8 +19,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.ButtonGroup;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import javax.swing.JTextArea;
 import java.awt.Font;
@@ -28,20 +26,20 @@ import java.awt.Font;
 public class Gui {
 	public JFrame frmMtbf;
 	private JTextField txtAdmin;
-	private JTextField textField_Range_1;									// Start range
-	private JTextField textField_Range_2;									// End range
+	private JTextField textField_Range_1; // Start range
+	private JTextField textField_Range_2; // End range
 	private JButton btnStart = new JButton("Start");
 	private JButton btnStop = new JButton("Stop");
 	private final ButtonGroup buttonGroup = new ButtonGroup();
-	private JTextArea textArea = new JTextArea();							// Main text area
-	
+	private JTextArea textArea = new JTextArea(); // Main text area
+
 	private MTBF mtBF;
-	private Thread bfThread;												// MTBF class thread
-	private Thread resultThread;											// Thread to update textArea text
-	private int maxThreads = Runtime.getRuntime().availableProcessors();	// get max threads supported by pc
+	private Thread bfThread; // MTBF class thread
+	private Thread resultThread; // Thread to update textArea text
+	private int maxThreads = Runtime.getRuntime().availableProcessors(); // get max threads supported by pc
 	private int threads = maxThreads;
-	private boolean isRangeOk = true;										// boolean to check BF range
-	private boolean isStopped = false;										// boolean to check if stopped by user
+	private boolean isRangeOk = true; // boolean to check BF range
+	private boolean isStopped = false; // boolean to check if stopped by user
 
 	/**
 	 * Create the application.
@@ -62,7 +60,7 @@ public class Gui {
 
 			}
 		});
-		/* 
+		/*
 		 * func to get back focus from input text fields
 		 */
 		frmMtbf.addMouseListener(new MouseAdapter() {
@@ -114,77 +112,83 @@ public class Gui {
 		txtAdmin.setColumns(10);
 
 		JLabel lblRange1 = new JLabel("Range:");
-		
+
 		textField_Range_1 = new JTextField();
-		textField_Range_1.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				warn();
-			}
-			@Override
-			public void focusGained(FocusEvent e) {
-				isRangeOk = false;
-				btnStart.setEnabled(false);
-				btnStop.setEnabled(false);
-			}
-			// pattern to accept only decimals with one to 3 digits
-			Pattern pt = Pattern.compile("\\d{1,3}");
-			public void warn() {
-				// check if theres a input and it matches the pattern
-				if (textField_Range_1.getText().length() > 0 && !pt.matcher(textField_Range_1.getText()).matches()) {
-					JOptionPane.showMessageDialog(null, "Error: Please enter a number with atleast 1 digit", "Error Massage",
-							JOptionPane.ERROR_MESSAGE);
-					isRangeOk = false;
-					btnStart.setEnabled(false);
-					btnStop.setEnabled(false);
-				} else if (textField_Range_1.getText().length() == 0) {
-					JOptionPane.showMessageDialog(null, "Error: Please enter a number bigger than 0", "Error Massage",
-							JOptionPane.ERROR_MESSAGE);
-					isRangeOk = false;
-					btnStart.setEnabled(false);
-					btnStop.setEnabled(false);
-				} else {
-					isRangeOk = true;
-					setButtons();
-				}
-			}
-		});
+		// textField_Range_1.addFocusListener(new FocusAdapter() {
+		// @Override
+		// public void focusLost(FocusEvent e) {
+		// warn();
+		// }
+		// @Override
+		// public void focusGained(FocusEvent e) {
+		// isRangeOk = false;
+		// btnStart.setEnabled(false);
+		// btnStop.setEnabled(false);
+		// }
+		// // pattern to accept only decimals with one to 3 digits
+		// Pattern pt = Pattern.compile("\\d{1,3}");
+		// public void warn() {
+		// // check if theres a input and it matches the pattern
+		// if (textField_Range_1.getText().length() > 0 &&
+		// !pt.matcher(textField_Range_1.getText()).matches()) {
+		// JOptionPane.showMessageDialog(null, "Error: Please enter a number
+		// with atleast 1 digit", "Error Massage",
+		// JOptionPane.ERROR_MESSAGE);
+		// isRangeOk = false;
+		// btnStart.setEnabled(false);
+		// btnStop.setEnabled(false);
+		// } else if (textField_Range_1.getText().length() == 0) {
+		// JOptionPane.showMessageDialog(null, "Error: Please enter a number
+		// bigger than 0", "Error Massage",
+		// JOptionPane.ERROR_MESSAGE);
+		// isRangeOk = false;
+		// btnStart.setEnabled(false);
+		// btnStop.setEnabled(false);
+		// } else {
+		// isRangeOk = true;
+		// setButtons();
+		// }
+		// }
+		// });
 		textField_Range_1.setText("0");
 		textField_Range_1.setColumns(10);
 
 		textField_Range_2 = new JTextField();
 		textField_Range_2.setText("999");
-		textField_Range_2.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				warn();
-			}
-			@Override
-			public void focusGained(FocusEvent e) {
-				isRangeOk = false;
-				btnStart.setEnabled(false);
-				btnStop.setEnabled(false);
-			}
-			Pattern pt = Pattern.compile("\\d{1,3}");
-			public void warn() {
-				if (textField_Range_2.getText().length() > 0 && !pt.matcher(textField_Range_2.getText()).matches()) {
-					JOptionPane.showMessageDialog(null, "Error: Please enter a number with atleast 1 digit", "Error Massage",
-							JOptionPane.ERROR_MESSAGE);
-					isRangeOk = false;
-					btnStart.setEnabled(false);
-					btnStop.setEnabled(false);
-				} else if (textField_Range_2.getText().length() == 0) {
-					JOptionPane.showMessageDialog(null, "Error: Please enter number bigger than 0", "Error Massage",
-							JOptionPane.ERROR_MESSAGE);
-					isRangeOk = false;
-					btnStart.setEnabled(false);
-					btnStop.setEnabled(false);
-				} else {
-					isRangeOk = true;
-					setButtons();
-				}
-			}
-		});
+		// textField_Range_2.addFocusListener(new FocusAdapter() {
+		// @Override
+		// public void focusLost(FocusEvent e) {
+		// warn();
+		// }
+		// @Override
+		// public void focusGained(FocusEvent e) {
+		// isRangeOk = false;
+		// btnStart.setEnabled(false);
+		// btnStop.setEnabled(false);
+		// }
+		// Pattern pt = Pattern.compile("\\d{1,3}");
+		// public void warn() {
+		// if (textField_Range_2.getText().length() > 0 &&
+		// !pt.matcher(textField_Range_2.getText()).matches()) {
+		// JOptionPane.showMessageDialog(null, "Error: Please enter a number
+		// with atleast 1 digit", "Error Massage",
+		// JOptionPane.ERROR_MESSAGE);
+		// isRangeOk = false;
+		// btnStart.setEnabled(false);
+		// btnStop.setEnabled(false);
+		// } else if (textField_Range_2.getText().length() == 0) {
+		// JOptionPane.showMessageDialog(null, "Error: Please enter number
+		// bigger than 0", "Error Massage",
+		// JOptionPane.ERROR_MESSAGE);
+		// isRangeOk = false;
+		// btnStart.setEnabled(false);
+		// btnStop.setEnabled(false);
+		// } else {
+		// isRangeOk = true;
+		// setButtons();
+		// }
+		// }
+		// });
 
 		textField_Range_2.setColumns(10);
 
@@ -224,32 +228,30 @@ public class Gui {
 		 */
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//set gui
-				btnStart.setEnabled(false);
-				btnStop.setEnabled(true);
-				
-				isStopped = false;
-				
-				// build MTBF class
-				mtBF = new MTBF.Builder()
-						.LOGIN("admin")
-						.RANGE_START(Integer.parseInt(textField_Range_1.getText()))
-						.RANGE_END(Integer.parseInt(textField_Range_2.getText()))
-						.THREADS(getThreadNumber())
-						.build();
-				// start new thread
-				bfThread = new Thread(new Runnable() {
-					@Override
-					public void run() {
-						mtBF.setThreadsNumber(getThreadNumber());
-						mtBF.run();
-					}
-				});
+				if (checkRangeInput()) {
+					// set gui
+					btnStart.setEnabled(false);
+					btnStop.setEnabled(true);
 
-				bfThread.start();
-				
-				setButtons();
-				showResults();
+					isStopped = false;
+					// build MTBF class
+					mtBF = new MTBF.Builder().LOGIN("admin").RANGE_START(Integer.parseInt(textField_Range_1.getText()))
+							.RANGE_END(Integer.parseInt(textField_Range_2.getText())).THREADS(getThreadNumber())
+							.build();
+					// start new thread
+					bfThread = new Thread(new Runnable() {
+						@Override
+						public void run() {
+							mtBF.setThreadsNumber(getThreadNumber());
+							mtBF.run();
+						}
+					});
+
+					bfThread.start();
+
+					setButtons();
+					showResults();
+				}
 			}
 		});
 		/*
@@ -318,17 +320,17 @@ public class Gui {
 		panel_RightSide.setLayout(gl_panel_RightSide);
 		frmMtbf.getContentPane().setLayout(groupLayout);
 	}
+
 	/*
-	 * setButtons func
-	 * sets the buttons according to current situation
+	 * setButtons func sets the buttons according to current situation
 	 */
 	private void setButtons() {
 		// if BF proccess is running
-		if (bfThread != null && bfThread.isAlive() && isRangeOk == true) {
+		if (bfThread != null && bfThread.isAlive()) {
 			btnStart.setEnabled(false);
 			btnStop.setEnabled(true);
-		// if BF proccess is terminated
-		} else if (bfThread != null && bfThread.getState().toString() == "TERMINATED" && isRangeOk == true) {
+			// if BF proccess is terminated
+		} else if (bfThread != null && bfThread.getState().toString() == "TERMINATED") {
 			btnStart.setEnabled(true);
 			btnStop.setEnabled(false);
 			// check if terminated by user
@@ -341,7 +343,7 @@ public class Gui {
 					textArea.setText(mtBF.getResult());
 				}
 			}
-		// check the range
+			// check the range
 		} else if (isRangeOk == false) {
 			btnStart.setEnabled(false);
 			btnStop.setEnabled(false);
@@ -350,18 +352,59 @@ public class Gui {
 			btnStop.setEnabled(false);
 		}
 	}
+
 	/*
 	 * set threads number
 	 */
 	private void setThreadNumber(int thread) {
 		this.threads = thread;
 	}
+
 	/*
 	 * get threads number
 	 */
 	public int getThreadNumber() {
 		return this.threads;
 	}
+
+	private boolean checkRangeInput() {
+		boolean isOk = true;
+		Pattern pt = Pattern.compile("\\d{1,3}");
+		// check if theres a input and it matches the pattern
+		if ((!pt.matcher(textField_Range_1.getText()).matches())
+				|| (!pt.matcher(textField_Range_2.getText()).matches())) {
+			JOptionPane.showMessageDialog(null, "Error: Please enter a valid range", "Error Massage",
+					JOptionPane.ERROR_MESSAGE);
+			isOk = false;
+			btnStart.setEnabled(false);
+			btnStop.setEnabled(false);
+		// check if both numbers arent the same
+		} else if (textField_Range_1.getText().equals(textField_Range_2.getText())) {
+			JOptionPane.showMessageDialog(null, "Error: Please enter a valid range", "Error Massage",
+					JOptionPane.ERROR_MESSAGE);
+			isOk = false;
+			btnStart.setEnabled(false);
+			btnStop.setEnabled(false);
+		// check if the start number is smaller than end number
+		} else if (Integer.parseInt(textField_Range_1.getText()) > Integer.parseInt(textField_Range_2.getText())) {
+			JOptionPane.showMessageDialog(null, "Error: Please enter a valid range", "Error Massage",
+					JOptionPane.ERROR_MESSAGE);
+			isOk = false;
+			btnStart.setEnabled(false);
+			btnStop.setEnabled(false);
+			
+//		} else if (textField_Range_1.getText().length() == 0 || textField_Range_2.getText().length() == 0) {
+//			JOptionPane.showMessageDialog(null, "Error: Please enter a valid range", "Error Massage",
+//					JOptionPane.ERROR_MESSAGE);
+//			isOk = false;
+//			btnStart.setEnabled(false);
+//			btnStop.setEnabled(false);
+		} else {
+			isOk = true;
+		}
+		return isOk;
+	}
+
 	/*
 	 * Show BF results on textarea
 	 */

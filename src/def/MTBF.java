@@ -84,8 +84,14 @@ public class MTBF {
 	        service.execute(new Runnable() {
 	            @Override
 	            public void run() {
-	            	updateResultString("Thread: "+ threadID + "	Start: "+ start + "	End: "+(end)+"\n");
-	            	threadBrute(start, end);
+	            	// if theres is a range of 1 number and few threads so all threads but the last will check for same start and end numbers
+	            	if(threadID == 0 || start == end || start+1 == end){
+	            		updateResultString("Thread: "+ threadID + "	Start: "+ start + "	End: "+(end)+"\n");
+	            		threadBrute(start, end);
+	            	} else {
+	            		updateResultString("Thread: "+ threadID + "	Start: "+ (start+1) + "	End: "+(end)+"\n");
+	            		threadBrute(start+1, end);
+	            	}
 	            }
 	        });
 	        current_start = (current_start+subrange_length);
@@ -97,6 +103,8 @@ public class MTBF {
 	    } catch (InterruptedException e) {
 	        System.out.println("multiThreadBrute() interrupted: " + e.getMessage());
 	    }
+	    if(getPass() == null)
+	    	updateResultString("Did not find a match\n");
 	    }
 		
 	    /**
@@ -135,10 +143,7 @@ public class MTBF {
 						setPass(formattedPassword);
 						if(getPass() != null){
 							updateResultString("Right password: "+getPass()+"\nTried passwords: " + getCounter()+"\n");
-						} else {
-							updateResultString("Did not find a match\n");
 						}
-						
 						// stop the treads
 						stopThreads();
 					}
